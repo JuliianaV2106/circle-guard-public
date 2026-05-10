@@ -83,7 +83,9 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             when {
-                branch 'master'
+                expression { 
+                    return env.GIT_BRANCH == 'origin/master' 
+                }
             }
             steps {
                 script {
