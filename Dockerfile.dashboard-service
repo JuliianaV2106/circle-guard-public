@@ -1,0 +1,21 @@
+# Stage 1: BUILD
+FROM gradle:8.7-jdk21 AS builder
+WORKDIR /workspace
+COPY build.gradle.kts settings.gradle.kts ./
+COPY gradle ./gradle
+COPY gradlew ./
+COPY services/circleguard-dashboard-service/build.gradle.kts \
+     services/circleguard-dashboard-service/
+COPY services/circleguard-dashboard-service/src \
+     services/circleguard-dashboard-service/src
+RUN gradle :services:circleguard-dashboard-service:bootJar \
+    --no-daemon -x test
+
+# Stage 2: RUNTIME
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=builder \
+     /workspace/services/circleguard-dashboard-service/build/libs/*.jar \
+     app.jar
+EXPOSE 8085
+ENTRYPOINT ["java", "-jar", "app.jar"]
