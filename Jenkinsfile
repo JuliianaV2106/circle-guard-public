@@ -58,6 +58,29 @@ pipeline {
                 }
             }
         }
+        stage('Trivy Security Scan') {
+            steps {
+                script {
+                    def services = [
+                        'auth-service',
+                        'gateway-service',
+                        'identity-service',
+                        'form-service',
+                        'notification-service',
+                        'dashboard-service'
+                    ]
+                    for (service in services) {
+                        sh """
+                            trivy image \
+                                --exit-code 0 \
+                                --severity HIGH,CRITICAL \
+                                --format table \
+                                circleguard/${service}:latest
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
