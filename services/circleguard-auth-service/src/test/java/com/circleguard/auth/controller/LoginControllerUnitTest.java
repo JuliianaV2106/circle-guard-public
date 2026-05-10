@@ -72,9 +72,12 @@ public class LoginControllerUnitTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    // Test 3: Login sin body retorna 400
+    /// Test 3: Login con body vacío retorna error de cliente
     @Test
-    void shouldReturn400WhenBodyIsMissing() throws Exception {
+    void shouldReturn4xxWhenBodyIsEmpty() throws Exception {
+        Mockito.when(authManager.authenticate(Mockito.any()))
+                .thenThrow(new BadCredentialsException("Missing credentials"));
+
         mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
