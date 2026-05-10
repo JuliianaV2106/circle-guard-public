@@ -30,6 +30,23 @@ pipeline {
                 }
             }
         }
+        stage('Docker Build') {
+            steps {
+                script {
+                    def services = [
+                        'auth-service',
+                        'gateway-service',
+                        'identity-service',
+                        'form-service',
+                        'notification-service',
+                        'dashboard-service'
+                    ]
+                    for (service in services) {
+                        sh "docker build -f Dockerfile.${service} -t circleguard/${service}:latest ."
+                    }
+                }
+            }
+        }
     }
 
     post {
