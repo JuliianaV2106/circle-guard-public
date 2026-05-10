@@ -100,7 +100,7 @@ pipeline {
                     for (service in services) {
                         sh "kubectl apply -f k8s/${service}.yaml"
                     }
-                    sh "kubectl rollout status deployment/auth-service -n circleguard --timeout=120s"
+                    sh "kubectl rollout status deployment/gateway-service -n circleguard --timeout=120s"
                 }
             }
         }
