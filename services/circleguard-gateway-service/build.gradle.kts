@@ -15,4 +15,8 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.wiremock:wiremock-standalone:3.3.1")
+    testImplementation("it.ozimov:embedded-redis:0.7.3") {
+    exclude(group = "org.slf4j", module = "slf4j-simple")
+}
 }
