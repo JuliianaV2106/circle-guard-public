@@ -18,8 +18,11 @@ spring:
     enabled: false
   kafka:
     bootstrap-servers: localhost:9092
-    consumer:
-      auto-offset-reset: earliest
+    listener:
+      auto-startup: false
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+
+# Deshabilitar listeners de Kafka en tests
+spring.kafka.listener.auto-startup: false
