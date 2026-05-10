@@ -81,6 +81,27 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Kubernetes') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    def services = [
+                        'auth-service',
+                        'gateway-service',
+                        'identity-service',
+                        'form-service',
+                        'notification-service',
+                        'dashboard-service'
+                    ]
+                    for (service in services) {
+                        sh "kubectl apply -f k8s/${service}.yaml"
+                    }
+                    sh "kubectl rollout status deployment/auth-service -n circleguard --timeout=120s"
+                }
+            }
+        }
     }
 
     post {
