@@ -13,6 +13,11 @@ pipeline {
                 git branch: 'master', url: "${REPO_URL}"
             }
         }
+        stage('Build') {
+            steps {
+                sh './gradlew clean build -x test --no-daemon'
+            }
+        }
 
     }
 
