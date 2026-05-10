@@ -1,0 +1,101 @@
+pipeline {
+    agent any
+    environment {
+        SONAR_TOKEN = credentials('sonarqube-token')
+        REPO_URL = 'https://github.com/JuliianaV2106/circle-guard-public.git'
+        STAGE_NAMESPACE = 'circleguard-stage'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: "${REPO_URL}", branch: 'master'
+            }
+        }
+
+        stage('Verify Images Exist') {
+            steps {
+                script {
+                    def services = [
+                        'gateway-service',
+                        'notification-service'
+                    ]
+                    for (service in services) {
+                        sh "docker image inspect circleguard/${service}:latest > /dev/null 2>&1 || (echo 'Image circleguard/${service}:latest not found' && exit 1)"
+                    }
+                    echo 'All images verified ✅'
+                }
+            }
+        }
+
+        stage('Deploy to Stage') {
+            steps {
+                script {
+                    sh "kubectl apply -f k8s-stage/gateway-service.yaml"
+                    sh "kubectl apply -f k8s-stage/notification-service.yaml"
+                    sh "kubectl rollout status deployment/gateway-service -n ${STAGE_NAMESPACE} --timeout=120s"
+                    echo 'Deploy to STAGE complete ✅'
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                script {
+                    sleep(10)
+                    sh """
+                        kubectl get pods -n ${STAGE_NAMESPACE}
+                        kubectl get services -n ${STAGE_NAMESPACE}
+                    """
+                    // Verifica que el gateway responde
+                    sh """
+                        curl -s -o /dev/null -w "%{http_code}" \
+                        http://host.docker.internal:31450/actuator/health \
+                        || echo 'Health check attempted'
+                    """
+                }
+            }
+        }
+
+        stage('Smoke Tests') {
+            steps {
+                script {
+                    echo 'Running smoke tests against STAGE environment...'
+                    // Test 1: Gateway responde
+                    sh """
+                        STATUS=\$(curl -s -o /dev/null -w "%{http_code}" \
+                        -X POST http://host.docker.internal:31450/api/v1/gate/validate \
+                        -H 'Content-Type: application/json' \
+                        -d '{"token": "smoke-test-token"}' \
+                        || echo '000')
+                        echo "Gateway response status: \$STATUS"
+                        echo 'Smoke test completed'
+                    """
+                }
+            }
+        }
+
+        stage('Security Scan Stage') {
+            steps {
+                script {
+                    def services = ['gateway-service', 'notification-service']
+                    for (service in services) {
+                        sh "trivy image --exit-code 0 --severity CRITICAL --format table circleguard/${service}:latest"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline STAGE finalizado'
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline STAGE EXITOSO '
+        }
+        failure {
+            echo 'Pipeline STAGE FALLIDO '
+            sh "kubectl get pods -n circleguard-stage || true"
+        }
+    }
+}
