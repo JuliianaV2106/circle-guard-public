@@ -1,6 +1,7 @@
 jwt:
-  secret: "my-super-secret-test-key-32-chars-long"
+  secret: "my-super-secret-test-key-that-is-32-chars-long!!"
   expiration: 3600000
+
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -15,3 +16,10 @@ spring:
       ddl-auto: create-drop
   flyway:
     enabled: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: earliest
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
