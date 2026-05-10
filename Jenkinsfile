@@ -47,6 +47,17 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh '''./gradlew sonar --no-daemon \
+                        -Dsonar.projectKey=circle-guard \
+                        -Dsonar.projectName=circle-guard \
+                        -Dsonar.host.url=http://sonarqube:9000 \
+                        -Dsonar.token=${SONAR_TOKEN}'''
+                }
+            }
+        }
     }
 
     post {
