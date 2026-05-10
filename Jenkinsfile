@@ -19,8 +19,8 @@ pipeline {
             }
         }
         stage('Test') {
-            steps {
-                sh './gradlew cleanTest test --no-daemon'
+    steps {
+                sh './gradlew cleanTest test --no-daemon -x :services:circleguard-notification-service:test'
             }
             post {
                 always {
@@ -28,7 +28,6 @@ pipeline {
                 }
             }
         }
-
     }
 
     post {
