@@ -127,6 +127,60 @@ de infraestructura y microservicios donde las tareas tienen duraciones variables
 - Circuit Breaker
 - RBAC y secretos
 
+## Sprints
+
+### Sprint 1 — Infraestructura base CI/CD
+**Periodo:** 1 Junio 2026 - 7 Junio 2026  
+**Objetivo:** Pipeline funcional con los 3 ambientes
+
+**Historias completadas:**
+
+| ID | Historia | Puntos | Estado |
+|----|---------|--------|--------|
+| CICD-1 | Configurar Jenkins con Docker y Kubernetes | 5 | Completado |
+| CICD-2 | Pipeline DEV con build y pruebas | 8 | Completado |
+| CICD-3 | Integracion SonarQube | 3 | Completado |
+| CICD-4 | Escaneo Trivy en imagenes Docker | 3 | Completado |
+| CICD-5 | Pipeline STAGE con smoke tests | 5 | Completado |
+| CICD-6 | Pipeline MASTER con Release Notes | 8 | Completado |
+
+**Velocidad del sprint:** 32 puntos  
+**Completado:** 32/32 puntos (100%)
+
+**Retrospectiva:**
+- Lo que salio bien: pipelines funcionando en los 3 ambientes, 23 pruebas automatizadas pasando
+- Lo que mejorar: el auth-service no arranca localmente por configuracion de PostgreSQL
+- Accion de mejora: agregar infraestructura completa con Terraform en el siguiente sprint
+
+---
+
+### Sprint 2 — Infraestructura como Codigo y Patrones
+**Periodo:** 7 Junio 2026 - 14 Junio 2026  
+**Objetivo:** Terraform para los 3 ambientes y patrones de diseno
+
+**Historias completadas:**
+
+| ID | Historia | Puntos | Estado |
+|----|---------|--------|--------|
+| INFRA-1 | Terraform namespace DEV | 3 | Completado |
+| INFRA-2 | Terraform namespace STAGE | 2 | Completado |
+| INFRA-3 | Terraform namespace MASTER | 2 | Completado |
+| INFRA-4 | ConfigMaps por ambiente con Terraform | 5 | Completado |
+
+**En progreso:**
+
+| ID | Historia | Puntos | Estado |
+|----|---------|--------|--------|
+| INFRA-5 | Backend remoto Terraform | 5 | En progreso |
+| PAT-1 | Circuit Breaker en gateway-service | 8 | En progreso |
+| PAT-2 | Health checks en manifiestos K8s | 3 | En progreso |
+| OBS-1 | Prometheus y Grafana | 8 | Pendiente |
+| OBS-2 | ELK Stack | 8 | Pendiente |
+| SEC-1 | RBAC en Kubernetes | 5 | Pendiente |
+| TEST-1 | OWASP ZAP | 5 | Pendiente |
+
+**Velocidad proyectada:** 50 puntos
+
 ## Metricas del equipo
 
 | Metrica | Iteracion 1 | Iteracion 2 |
