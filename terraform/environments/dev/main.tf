@@ -6,8 +6,11 @@ terraform {
     }
   }
 
-  backend "local" {
-    path = "terraform.tfstate"
+  cloud {
+    organization = "circle-guard-juliana"
+    workspaces {
+      name = "circle-guard-dev"
+    }
   }
 }
 

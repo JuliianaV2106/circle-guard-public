@@ -84,12 +84,45 @@ Destruir infraestructura:
 terraform destroy -auto-approve
 ```
 
-## Backend
+## Backend remoto — Terraform Cloud
 
-Actualmente se usa backend local. El estado se almacena en archivos
-`terraform.tfstate` dentro de cada carpeta de ambiente. En un ambiente
-productivo real se recomendaria usar un backend remoto como S3 o
-Terraform Cloud para compartir el estado entre miembros del equipo.
+El estado de Terraform se almacena en **HCP Terraform Cloud** de forma remota,
+garantizando que el estado sea compartido, versionado y no viva en el repositorio.
+
+**Organizacion:** circle-guard-juliana  
+**URL:** https://app.terraform.io/app/circle-guard-juliana
+
+### Workspaces configurados
+
+| Workspace | Ambiente | Modo de ejecucion |
+|-----------|---------|-------------------|
+| circle-guard-dev | DEV | Local |
+| circle-guard-stage | STAGE | Local |
+| circle-guard-master | MASTER | Local |
+
+El modo de ejecucion **Local** permite que Terraform acceda a los modulos
+locales con rutas relativas, mientras el estado se almacena remotamente
+en Terraform Cloud.
+
+### Configuracion del backend en cada ambiente
+
+```hcl
+cloud {
+  organization = "circle-guard-juliana"
+  workspaces {
+    name = "circle-guard-dev"
+  }
+}
+```
+
+### Autenticacion
+
+```bash
+terraform login
+```
+
+Este comando abre el navegador para generar un token de acceso que se
+almacena localmente en `~/.terraform.d/credentials.tfrc.json`.
 
 ## Decisiones de diseno
 
