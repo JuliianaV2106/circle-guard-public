@@ -119,7 +119,7 @@ pipeline {
                     <p>Revisa el console output para ver el error.</p>
                 """,
                 mimeType: 'text/html',
-                to: '${DEFAULT_RECIPIENTS}'
+                to: 'juliianavalenciia21@gmail.com'
             )
         }
     }

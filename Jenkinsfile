@@ -141,9 +141,6 @@ pipeline {
                 """,
                 mimeType: 'text/html',
                 to: 'juliianavalenciia21@gmail.com',
-                replyTo: 'juliianavalenciia21@gmail.com',
-                from: 'juliianavalenciia21@gmail.com'   
-                to: '${DEFAULT_RECIPIENTS}'
             )
         }
     }

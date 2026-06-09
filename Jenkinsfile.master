@@ -108,7 +108,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Approval') {
             steps {
                 timeout(time: 30, unit: 'MINUTES') {
@@ -214,8 +214,7 @@ pipeline {
                     <p>Todos los stages completaron exitosamente.</p>
                 """,
                 mimeType: 'text/html',
-                to: '${DEFAULT_RECIPIENTS}'
-            )
+                to: 'juliianavalenciia21@gmail.com'            )
         }
         failure {
             echo 'Pipeline FALLIDO'
