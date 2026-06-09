@@ -23,4 +23,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.wiremock:wiremock-standalone:3.3.1")
+    implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("io.github.resilience4j:resilience4j-circuitbreaker:2.1.0")
 }
