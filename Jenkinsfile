@@ -106,16 +106,42 @@ pipeline {
         }
     }
 
-    post {
+   post {
         always {
             echo 'Pipeline finalizado'
             cleanWs()
         }
-        failure {
-            echo 'Pipeline FALLIDO'
-        }
         success {
             echo 'Pipeline EXITOSO'
+            emailext(
+                subject: "SUCCESS: Circle Guard Pipeline - Build #${BUILD_NUMBER}",
+                body: """
+                    <h2>Pipeline Exitoso</h2>
+                    <p><b>Job:</b> ${JOB_NAME}</p>
+                    <p><b>Build:</b> #${BUILD_NUMBER}</p>
+                    <p><b>Branch:</b> ${GIT_BRANCH}</p>
+                    <p><b>URL:</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
+                    <p>Todos los stages completaron exitosamente.</p>
+                """,
+                mimeType: 'text/html',
+                to: '${DEFAULT_RECIPIENTS}'
+            )
+        }
+        failure {
+            echo 'Pipeline FALLIDO'
+            emailext(
+                subject: "FAILED: Circle Guard Pipeline - Build #${BUILD_NUMBER}",
+                body: """
+                    <h2>Pipeline Fallido</h2>
+                    <p><b>Job:</b> ${JOB_NAME}</p>
+                    <p><b>Build:</b> #${BUILD_NUMBER}</p>
+                    <p><b>Branch:</b> ${GIT_BRANCH}</p>
+                    <p><b>URL:</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
+                    <p>Revisa el console output para ver el error.</p>
+                """,
+                mimeType: 'text/html',
+                to: '${DEFAULT_RECIPIENTS}'
+            )
         }
     }
 }

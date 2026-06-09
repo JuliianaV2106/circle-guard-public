@@ -108,6 +108,23 @@ pipeline {
                 }
             }
         }
+        
+        stage('Approval') {
+            steps {
+                timeout(time: 30, unit: 'MINUTES') {
+                    input message: 'Aprobar despliegue a MASTER?',
+                        ok: 'Aprobar',
+                        submitter: 'admin',
+                        parameters: [
+                            string(
+                                name: 'DEPLOYMENT_NOTES',
+                                defaultValue: '',
+                                description: 'Notas del despliegue (opcional)'
+                            )
+                        ]
+                }
+            }
+        }
 
         stage('Deploy to Master') {
             steps {
@@ -181,16 +198,40 @@ pipeline {
     }
     post {
         always {
-            echo 'Pipeline MASTER finalizado'
+            echo 'Pipeline finalizado'
             cleanWs()
         }
         success {
-            echo "Pipeline MASTER EXITOSO — Version ${VERSION} desplegada en producción"
+            echo 'Pipeline EXITOSO'
+            emailext(
+                subject: "SUCCESS: Circle Guard Pipeline - Build #${BUILD_NUMBER}",
+                body: """
+                    <h2>Pipeline Exitoso</h2>
+                    <p><b>Job:</b> ${JOB_NAME}</p>
+                    <p><b>Build:</b> #${BUILD_NUMBER}</p>
+                    <p><b>Branch:</b> ${GIT_BRANCH}</p>
+                    <p><b>URL:</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
+                    <p>Todos los stages completaron exitosamente.</p>
+                """,
+                mimeType: 'text/html',
+                to: '${DEFAULT_RECIPIENTS}'
+            )
         }
         failure {
-            echo 'Pipeline MASTER FALLIDO'
-            sh "kubectl get pods -n circleguard-master || true"
-            sh "kubectl get pods -n circleguard-stage || true"
+            echo 'Pipeline FALLIDO'
+            emailext(
+                subject: "FAILED: Circle Guard Pipeline - Build #${BUILD_NUMBER}",
+                body: """
+                    <h2>Pipeline Fallido</h2>
+                    <p><b>Job:</b> ${JOB_NAME}</p>
+                    <p><b>Build:</b> #${BUILD_NUMBER}</p>
+                    <p><b>Branch:</b> ${GIT_BRANCH}</p>
+                    <p><b>URL:</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
+                    <p>Revisa el console output para ver el error.</p>
+                """,
+                mimeType: 'text/html',
+                to: '${DEFAULT_RECIPIENTS}'
+            )
         }
     }
 }
