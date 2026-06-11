@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONAR_TOKEN = credentials('sonarqube-token')
-        TFE_TOKEN   = credentials('tfe-token')
+        TFE_TOKEN   = credentials('tfetoken')
         REPO_URL    = 'https://github.com/JuliianaV2106/circle-guard-public.git'
     }
 
