@@ -11,7 +11,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'master', url: "${REPO_URL}"
+                checkout scm
             }
         }
         stage('Build') {
@@ -125,7 +125,7 @@ pipeline {
         stage('Deploy to DEV (Terraform)') {
             when {
                 expression { 
-                    return env.GIT_BRANCH == 'origin/master' 
+                    return env.BRANCH_NAME == 'develop' 
                 }
             }
             steps {
