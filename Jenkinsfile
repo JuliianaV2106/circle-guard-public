@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         SONAR_TOKEN = credentials('sonarqube-token')
+        TFE_TOKEN   = credentials('tfe-token')
         REPO_URL    = 'https://github.com/JuliianaV2106/circle-guard-public.git'
     }
 
@@ -80,7 +81,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to DEV (Terraform)') {
             when {
                 expression { 
                     return env.GIT_BRANCH == 'origin/master' 
@@ -88,18 +89,11 @@ pipeline {
             }
             steps {
                 script {
-                    def services = [
-                        'auth-service',
-                        'gateway-service',
-                        'identity-service',
-                        'form-service',
-                        'notification-service',
-                        'dashboard-service'
-                    ]
-                    for (service in services) {
-                        sh "kubectl apply -f k8s/${service}.yaml"
+                    dir('terraform/environments/dev') {
+                        sh "terraform init"
+                        sh "terraform apply -auto-approve -var-file=dev.tfvars"
+                        sh "kubectl rollout status deployment/gateway-service -n circleguard --timeout=120s"
                     }
-                    sh "kubectl rollout status deployment/gateway-service -n circleguard --timeout=120s"
                 }
             }
         }

@@ -43,3 +43,56 @@ module "configmap_dev" {
     APP_VERSION                = var.app_version
   }
 }
+
+module "auth_service" {
+  source         = "../../modules/microservice"
+  service_name   = "auth-service"
+  namespace_name = module.namespace_dev.namespace_name
+  container_port = 8081
+  spring_profile = var.environment
+}
+
+module "gateway_service" {
+  source                  = "../../modules/microservice"
+  service_name            = "gateway-service"
+  namespace_name          = module.namespace_dev.namespace_name
+  container_port          = 8080
+  service_type            = "NodePort"
+  node_port               = 31449
+  spring_profile          = var.environment
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  probe_path              = "/actuator/health"
+}
+
+module "identity_service" {
+  source         = "../../modules/microservice"
+  service_name   = "identity-service"
+  namespace_name = module.namespace_dev.namespace_name
+  container_port = 8082
+  spring_profile = var.environment
+}
+
+module "form_service" {
+  source         = "../../modules/microservice"
+  service_name   = "form-service"
+  namespace_name = module.namespace_dev.namespace_name
+  container_port = 8083
+  spring_profile = var.environment
+}
+
+module "notification_service" {
+  source         = "../../modules/microservice"
+  service_name   = "notification-service"
+  namespace_name = module.namespace_dev.namespace_name
+  container_port = 8084
+  spring_profile = var.environment
+}
+
+module "dashboard_service" {
+  source         = "../../modules/microservice"
+  service_name   = "dashboard-service"
+  namespace_name = module.namespace_dev.namespace_name
+  container_port = 8085
+  spring_profile = var.environment
+}

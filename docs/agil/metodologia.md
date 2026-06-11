@@ -127,6 +127,11 @@ _Leyenda: ✅ Done · ⏳ Pending_
 **Completado:**
 - ✅ INFRA-1, INFRA-2, INFRA-3 — Terraform namespaces DEV/STAGE/MASTER
 - ✅ INFRA-4 — Backend remoto Terraform
+- ✅ Módulo `microservice` (Deployment + Service) en Terraform
+- ✅ 6 microservicios migrados a Terraform en DEV (auth, gateway, identity, form, notification, dashboard)
+- ✅ 2 microservicios migrados a Terraform en STAGE y MASTER
+- ✅ Pipelines actualizados a `terraform apply` (Jenkinsfile, Jenkinsfile.stage, Jenkinsfile.master)
+- ✅ Documentación en `docsinfraestructura/`
 - ✅ CICD-1 — Notificaciones de fallo en pipelines
 - ✅ CICD-2 — Aprobación manual para producción
 - ✅ PAT-1 — Circuit Breaker
@@ -222,6 +227,7 @@ _Leyenda: ✅ Done · ⏳ Pending_
 | Metrica | Sprint 1 | Sprint 2 |
 |---------|----------|----------|
 | HUs completadas | 2 (CICD-1, CICD-2) | 6 (INFRA-1..4, PAT-1, PAT-2) |
+| Módulos Terraform | 0 | 3 (namespace, configmap, microservice) |
 | Puntos completados | 32 | 23 |
 | Cobertura de código | Por medir | Objetivo 70% |
 | Pipelines exitosos | 3 (DEV, STAGE, MASTER) | 3 |

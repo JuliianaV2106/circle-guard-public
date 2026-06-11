@@ -43,3 +43,23 @@ module "configmap_stage" {
     APP_VERSION                = var.app_version
   }
 }
+
+module "gateway_service" {
+  source                  = "../../modules/microservice"
+  service_name            = "gateway-service"
+  namespace_name          = module.namespace_stage.namespace_name
+  container_port          = 8080
+  service_type            = "NodePort"
+  node_port               = 31450
+  spring_profile          = "stage"
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+}
+
+module "notification_service" {
+  source         = "../../modules/microservice"
+  service_name   = "notification-service"
+  namespace_name = module.namespace_stage.namespace_name
+  container_port = 8084
+  spring_profile = "stage"
+}
