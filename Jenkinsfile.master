@@ -33,6 +33,9 @@ pipeline {
                     env.VERSION = "${major}.${minor}.${patch + 1}"
 
                     echo "Semantic version: v${env.VERSION}"
+                    sh "echo version=${env.VERSION} > version.properties"
+                    sh "git add version.properties && git commit -m 'chore: update version.properties to v${env.VERSION}' || true"
+                    sh "git push https://${GIT_CREDENTIALS_USR}:${GIT_CREDENTIALS_PSW}@github.com/JuliianaV2106/circle-guard-public.git master"
                 }
             }
         }
@@ -183,57 +186,8 @@ pipeline {
         stage('Generate Release Notes') {
             steps {
                 script {
-                    def date = new Date().format('yyyy-MM-dd')
-                    def releaseNotes = """# Release Notes — Circle Guard v${VERSION}
-
-**Fecha de release:** ${date}
-**Build:** #${BUILD_NUMBER}
-**Branch:** master
-**Ambiente:** Production (circleguard-master)
-
-## Servicios desplegados
-
-| Servicio | Imagen | Namespace |
-|---------|--------|-----------|
-| gateway-service | circleguard/gateway-service:${VERSION} | circleguard-master |
-| notification-service | circleguard/notification-service:${VERSION} | circleguard-master |
-
-## Pipeline ejecutado
-
-| Etapa | Estado |
-|-------|--------|
-| Build | Exitoso |
-| Unit Tests | Exitoso |
-| Static Analysis (SonarQube) | Exitoso |
-| Docker Build | Imágenes construidas |
-| Security Scan (Trivy) | Escaneado |
-| Deploy Stage | circleguard-stage |
-| System Tests | Exitoso |
-| Deploy Master | circleguard-master |
-
-## Commits incluidos
-
-\$(git log --oneline -10 || echo 'No git history available')
-
-## Vulnerabilidades conocidas
-
-- Apache Tomcat 10.1.19 — CVE-2025-24813 (CRITICAL) — Fix: actualizar a 10.1.35+
-- Apache Tomcat 10.1.19 — CVE-2026-29145 (CRITICAL) — Fix: actualizar a 10.1.53+
-- Spring Boot 3.2.4 — múltiples HIGH — Fix: actualizar a 3.3.11+
-
-## Change Management
-
-- **Tipo:** Release de funcionalidad
-- **Impacto:** Bajo — servicios gateway y notification
-- **Rollback:** kubectl rollout undo deployment/gateway-service -n circleguard-master
-- **Aprobado por:** Pipeline automático CI/CD
-
----
-*Generado automáticamente por Jenkins Pipeline — Build #${BUILD_NUMBER}*
-"""
-                    writeFile file: "RELEASE-NOTES-v${VERSION}.md", text: releaseNotes
-                    echo "Release Notes generadas: RELEASE-NOTES-v${VERSION}.md"
-                    sh "cat RELEASE-NOTES-v${VERSION}.md"
+                    sh 'chmod +x scripts/generate-release-notes.sh'
+                    sh "scripts/generate-release-notes.sh ${VERSION} RELEASE-NOTES-v${VERSION}.md"
                     archiveArtifacts artifacts: "RELEASE-NOTES-v${VERSION}.md"
                 }
             }
@@ -247,6 +201,23 @@ pipeline {
                     sh "git tag -a v${VERSION} -m 'Release v${VERSION}'"
                     sh "git push https://${GIT_CREDENTIALS_USR}:${GIT_CREDENTIALS_PSW}@github.com/JuliianaV2106/circle-guard-public.git v${VERSION}"
                     echo "Tag v${VERSION} created and pushed successfully"
+                }
+            }
+        }
+
+        stage('GitHub Release') {
+            environment {
+                GH_TOKEN = credentials('github-token')
+            }
+            steps {
+                script {
+                    sh """
+                        echo "${GH_TOKEN}" | gh auth login --with-token
+                        gh release create v${VERSION} \
+                            --title "Release v${VERSION}" \
+                            --notes-file RELEASE-NOTES-v${VERSION}.md \
+                            --target master
+                    """
                 }
             }
         }
