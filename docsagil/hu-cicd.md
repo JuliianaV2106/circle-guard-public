@@ -28,3 +28,13 @@
 | **Criterios de aceptación** | Reporte JaCoCo disponible como artefacto en Jenkins |
 | **Prioridad** | Media |
 | **Estado** | ⏳ Pending |
+
+## CICD-4: Versionado semántico automático
+| Campo | Valor |
+|-------|-------|
+| **Issue** | — |
+| **Historia** | Como DevOps, quiero versionado semántico automático en los releases |
+| **Criterios de aceptación** | Tag vMAJOR.MINOR.PATCH generado automáticamente; imágenes Docker etiquetadas con versión semántica |
+| **Prioridad** | Alta |
+| **Estado** | ✅ Done |
+| **Pipeline** | Jenkinsfile.master — stage `Semantic Versioning` + `Tag Release` |

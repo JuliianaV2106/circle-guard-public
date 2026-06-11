@@ -3,15 +3,37 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('sonarqube-token')
         TFE_TOKEN   = credentials('tfe-token')
+        GIT_CREDENTIALS = credentials('github-token')
         REPO_URL = 'https://github.com/JuliianaV2106/circle-guard-public.git'
         STAGE_NAMESPACE = 'circleguard-stage'
         MASTER_NAMESPACE = 'circleguard-master'
-        VERSION = "1.0.${BUILD_NUMBER}"
     }
     stages {
         stage('Checkout') {
             steps {
                 git url: "${REPO_URL}", branch: 'master'
+            }
+        }
+
+        stage('Semantic Versioning') {
+            steps {
+                script {
+                    sh 'git fetch --tags'
+                    def latestTag = sh(script: 'git describe --tags --match "v*.*.*" $(git rev-list --tags --max-count=1) 2>/dev/null || echo "v1.0.0"', returnStdout: true).trim()
+                    echo "Latest tag: ${latestTag}"
+
+                    def parts = latestTag.replace('v', '').split('\\.')
+                    def major = parts[0] as Integer
+                    def minor = parts[1] as Integer
+                    def patch = parts[2] as Integer
+
+                    env.MAJOR = "${major}"
+                    env.MINOR = "${minor}"
+                    env.PATCH = "${patch + 1}"
+                    env.VERSION = "${major}.${minor}.${patch + 1}"
+
+                    echo "Semantic version: v${env.VERSION}"
+                }
             }
         }
 
@@ -197,6 +219,18 @@ pipeline {
                     echo "Release Notes generadas: RELEASE-NOTES-v${VERSION}.md"
                     sh "cat RELEASE-NOTES-v${VERSION}.md"
                     archiveArtifacts artifacts: "RELEASE-NOTES-v${VERSION}.md"
+                }
+            }
+        }
+
+        stage('Tag Release') {
+            steps {
+                script {
+                    sh "git config user.email 'cicd@circleguard.com'"
+                    sh "git config user.name 'CircleGuard CI/CD'"
+                    sh "git tag -a v${VERSION} -m 'Release v${VERSION}'"
+                    sh "git push https://${GIT_CREDENTIALS_USR}:${GIT_CREDENTIALS_PSW}@github.com/JuliianaV2106/circle-guard-public.git v${VERSION}"
+                    echo "Tag v${VERSION} created and pushed successfully"
                 }
             }
         }

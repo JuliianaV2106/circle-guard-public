@@ -42,6 +42,7 @@ de infraestructura y microservicios donde las tareas tienen duraciones variables
 | CICD-1 | Agregar notificaciones de fallo en pipelines | [#6](https://github.com/JuliianaV2106/circle-guard-public/issues/6) | ✅ |
 | CICD-2 | Implementar aprobación manual para deploy a producción | [#7](https://github.com/JuliianaV2106/circle-guard-public/issues/7) | ✅ |
 | CICD-3 | Agregar reporte de cobertura de código | [#8](https://github.com/JuliianaV2106/circle-guard-public/issues/8) | ⏳ |
+| CICD-4 | Versionado semántico automático | — | ✅ |
 
 #### Epic 3 — Pruebas Completas
 | ID | Historia | Issue | Estado |
@@ -135,6 +136,7 @@ _Leyenda: ✅ Done · ⏳ Pending_
 - ✅ Documentación en `docsinfraestructura/`
 - ✅ CICD-1 — Notificaciones de fallo en pipelines
 - ✅ CICD-2 — Aprobación manual para producción
+- ✅ CICD-4 — Versionado semántico automático (tag vMAJOR.MINOR.PATCH)
 - ✅ PAT-1 — Circuit Breaker
 - ✅ PAT-2 — External Configuration
 - ✅ PAT-3 — Retry Pattern (Resilience4j + Spring Retry)
