@@ -33,6 +33,9 @@ class NotificationDispatcherTest {
     @MockBean
     private PushService pushService;
 
+    @MockBean
+    private AuditLogService auditLogService;
+
     @Test
     void shouldDispatchToAllChannelsConcurrently() throws Exception {
         when(emailService.sendAsync(any(), any())).thenReturn(CompletableFuture.completedFuture(null));

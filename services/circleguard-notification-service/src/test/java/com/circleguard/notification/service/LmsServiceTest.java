@@ -29,6 +29,9 @@ public class LmsServiceTest {
     @MockBean
     private PushService pushService;
 
+    @MockBean
+    private AuditLogService auditLogService;
+
     @Test
     void testRemoteAttendanceSync() {
         CompletableFuture<Void> future = lmsService.syncRemoteAttendance("student-123", "PROBABLE");

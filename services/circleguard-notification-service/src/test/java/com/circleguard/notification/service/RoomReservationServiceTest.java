@@ -29,6 +29,9 @@ public class RoomReservationServiceTest {
     @MockBean
     private PushService pushService;
 
+    @MockBean
+    private AuditLogService auditLogService;
+
     @Test
     void testCancelReservation() {
         CompletableFuture<Void> future = roomReservationService.cancelReservation("circle-1", "loc-1");

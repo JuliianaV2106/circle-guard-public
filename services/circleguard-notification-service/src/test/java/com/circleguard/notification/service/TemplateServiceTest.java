@@ -28,6 +28,9 @@ public class TemplateServiceTest {
     @MockBean
     private PushService pushService;
 
+    @MockBean
+    private AuditLogService auditLogService;
+
     @Test
     void testEmailTemplateGeneration() {
         String content = templateService.generateEmailContent("SUSPECT", "John Doe");
