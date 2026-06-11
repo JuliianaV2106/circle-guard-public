@@ -27,7 +27,9 @@
 | **Historia** | Como desarrollador, quiero ver reportes de cobertura en el pipeline |
 | **Criterios de aceptación** | Reporte JaCoCo disponible como artefacto en Jenkins |
 | **Prioridad** | Media |
-| **Estado** | ⏳ Pending |
+| **Estado** | ✅ Done |
+| **Configuración** | `build.gradle.kts` — plugin jacoco + jacocoTestReport |
+| **Pipeline** | Jenkins — stage `Coverage Report` |
 
 ## CICD-4: Versionado semántico automático
 | Campo | Valor |

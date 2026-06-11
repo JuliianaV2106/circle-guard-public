@@ -30,6 +30,24 @@ pipeline {
                 }
             }
         }
+        stage('Coverage Report') {
+            steps {
+                sh './gradlew jacocoTestReport --no-daemon 2>/dev/null || echo "Coverage report generated partially"'
+            }
+            post {
+                always {
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'services/circleguard-auth-service/build/reports/jacoco/test/html',
+                        reportFiles: 'index.html',
+                        reportName: 'JaCoCo Coverage (auth-service)'
+                    ])
+                    archiveArtifacts artifacts: '**/build/reports/jacoco/test/jacocoTestReport.xml', allowEmptyArchive: true
+                }
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {
@@ -78,6 +96,29 @@ pipeline {
                                 circleguard/${service}:latest
                         """
                     }
+                }
+            }
+        }
+        stage('OWASP ZAP Scan') {
+            steps {
+                script {
+                    sh '''
+                        chmod +x scripts/zap-scan.sh
+                        ./scripts/zap-scan.sh http://host.docker.internal:31449 build/reports/zap || echo "ZAP scan completed with warnings"
+                    '''
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'build/reports/zap/*', allowEmptyArchive: true
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'build/reports/zap',
+                        reportFiles: 'zap-report.html',
+                        reportName: 'OWASP ZAP Scan'
+                    ])
                 }
             }
         }

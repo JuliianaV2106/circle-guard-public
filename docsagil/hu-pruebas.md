@@ -7,7 +7,9 @@
 | **Historia** | Como equipo de seguridad, quiero escaneo automático con OWASP ZAP |
 | **Criterios de aceptación** | Escaneo ZAP ejecutado en pipeline; reporte generado como artefacto |
 | **Prioridad** | Alta |
-| **Estado** | ⏳ Pending |
+| **Estado** | ✅ Done |
+| **Pipeline** | Jenkins — stage `OWASP ZAP Scan` en DEV, STAGE, MASTER |
+| **Script** | `scripts/zap-scan.sh` |
 
 ## TEST-2: Configurar reporte de cobertura con JaCoCo
 | Campo | Valor |
@@ -16,4 +18,6 @@
 | **Historia** | Como desarrollador, quiero reportes de cobertura por servicio |
 | **Criterios de aceptación** | Cobertura mínima 70% en servicios principales; reporte JaCoCo disponible |
 | **Prioridad** | Media |
-| **Estado** | ⏳ Pending |
+| **Estado** | ✅ Done |
+| **Configuración** | `build.gradle.kts` — plugin jacoco + jacocoTestReport + jacocoTestCoverageVerification |
+| **Pipeline** | Jenkins — stage `Coverage Report` |

@@ -41,14 +41,14 @@ de infraestructura y microservicios donde las tareas tienen duraciones variables
 |----|----------|-------|--------|
 | CICD-1 | Agregar notificaciones de fallo en pipelines | [#6](https://github.com/JuliianaV2106/circle-guard-public/issues/6) | ✅ |
 | CICD-2 | Implementar aprobación manual para deploy a producción | [#7](https://github.com/JuliianaV2106/circle-guard-public/issues/7) | ✅ |
-| CICD-3 | Agregar reporte de cobertura de código | [#8](https://github.com/JuliianaV2106/circle-guard-public/issues/8) | ⏳ |
+| CICD-3 | Agregar reporte de cobertura de código | [#8](https://github.com/JuliianaV2106/circle-guard-public/issues/8) | ✅ |
 | CICD-4 | Versionado semántico automático | — | ✅ |
 
 #### Epic 3 — Pruebas Completas
 | ID | Historia | Issue | Estado |
 |----|----------|-------|--------|
-| TEST-1 | Implementar pruebas de seguridad con OWASP ZAP | [#9](https://github.com/JuliianaV2106/circle-guard-public/issues/9) | ⏳ |
-| TEST-2 | Configurar reporte de cobertura con JaCoCo | [#10](https://github.com/JuliianaV2106/circle-guard-public/issues/10) | ⏳ |
+| TEST-1 | Implementar pruebas de seguridad con OWASP ZAP | [#9](https://github.com/JuliianaV2106/circle-guard-public/issues/9) | ✅ |
+| TEST-2 | Configurar reporte de cobertura con JaCoCo | [#10](https://github.com/JuliianaV2106/circle-guard-public/issues/10) | ✅ |
 
 #### Epic 4 — Observabilidad
 | ID | Historia | Issue | Estado |
@@ -136,15 +136,15 @@ _Leyenda: ✅ Done · ⏳ Pending_
 - ✅ Documentación en `docsinfraestructura/`
 - ✅ CICD-1 — Notificaciones de fallo en pipelines
 - ✅ CICD-2 — Aprobación manual para producción
+- ✅ CICD-3 — Reporte de cobertura (JaCoCo)
 - ✅ CICD-4 — Versionado semántico automático (tag vMAJOR.MINOR.PATCH)
+- ✅ TEST-1 — OWASP ZAP
+- ✅ TEST-2 — JaCoCo
 - ✅ PAT-1 — Circuit Breaker
 - ✅ PAT-2 — External Configuration
 - ✅ PAT-3 — Retry Pattern (Resilience4j + Spring Retry)
 
 **Pendiente (pasa a Iteración 3):**
-- ⏳ CICD-3 — Reporte de cobertura de código
-- ⏳ TEST-1 — OWASP ZAP
-- ⏳ TEST-2 — JaCoCo
 - ⏳ OBS-1 — Prometheus y Grafana
 - ⏳ OBS-2 — ELK Stack
 - ⏳ OBS-3 — Alertas críticas
@@ -193,26 +193,27 @@ _Leyenda: ✅ Done · ⏳ Pending_
 | PAT-1 | Implementar Circuit Breaker | [#16](https://github.com/JuliianaV2106/circle-guard-public/issues/16) | 8 | Completado |
 | PAT-2 | Implementar External Configuration | [#17](https://github.com/JuliianaV2106/circle-guard-public/issues/17) | 3 | Completado |
 | PAT-3 | Implementar Retry Pattern | — | 3 | Completado |
+| CICD-3 | Agregar reporte de cobertura de código | [#8](https://github.com/JuliianaV2106/circle-guard-public/issues/8) | 5 | Completado |
+| CICD-4 | Versionado semántico automático | — | 3 | Completado |
+| TEST-1 | Implementar pruebas de seguridad con OWASP ZAP | [#9](https://github.com/JuliianaV2106/circle-guard-public/issues/9) | 8 | Completado |
+| TEST-2 | Configurar reporte de cobertura con JaCoCo | [#10](https://github.com/JuliianaV2106/circle-guard-public/issues/10) | 3 | Completado |
 
 **Pendiente (pasa a Sprint 3):**
 
 | ID | Historia | Issue | Puntos | Estado |
 |----|---------|-------|--------|--------|
-| CICD-3 | Agregar reporte de cobertura de código | [#8](https://github.com/JuliianaV2106/circle-guard-public/issues/8) | 5 | Pendiente |
-| TEST-1 | Implementar pruebas de seguridad con OWASP ZAP | [#9](https://github.com/JuliianaV2106/circle-guard-public/issues/9) | 8 | Pendiente |
-| TEST-2 | Configurar reporte de cobertura con JaCoCo | [#10](https://github.com/JuliianaV2106/circle-guard-public/issues/10) | 3 | Pendiente |
 | OBS-1 | Implementar Prometheus y Grafana | [#11](https://github.com/JuliianaV2106/circle-guard-public/issues/11) | 8 | Pendiente |
 | OBS-2 | Implementar ELK Stack | [#12](https://github.com/JuliianaV2106/circle-guard-public/issues/12) | 8 | Pendiente |
 | OBS-3 | Configurar alertas críticas | [#13](https://github.com/JuliianaV2106/circle-guard-public/issues/13) | 5 | Pendiente |
 | SEC-1 | Configurar RBAC en Kubernetes | [#14](https://github.com/JuliianaV2106/circle-guard-public/issues/14) | 5 | Pendiente |
 | SEC-2 | Implementar gestión de secretos | [#15](https://github.com/JuliianaV2106/circle-guard-public/issues/15) | 3 | Pendiente |
 
-**Velocidad del sprint:** 26 puntos  
-**Completado:** 26/26 puntos (100%)
+**Velocidad del sprint:** 47 puntos  
+**Completado:** 47/47 puntos (100%)
 
-### Sprint 3 — Pendientes (Observabilidad, Seguridad, Pruebas)
+### Sprint 3 — Observabilidad y Seguridad
 **Periodo:** 14 Junio 2026 - 21 Junio 2026  
-**Objetivo:** Finalizar las 8 HUs pendientes del proyecto
+**Objetivo:** Monitoreo completo y seguridad
 
 **Planificado:**
 
@@ -222,18 +223,15 @@ _Leyenda: ✅ Done · ⏳ Pending_
 | OBS-2 | Implementar ELK Stack | [#12](https://github.com/JuliianaV2106/circle-guard-public/issues/12) | 8 | Alta |
 | OBS-3 | Configurar alertas críticas | [#13](https://github.com/JuliianaV2106/circle-guard-public/issues/13) | 5 | Alta |
 | SEC-1 | Configurar RBAC en Kubernetes | [#14](https://github.com/JuliianaV2106/circle-guard-public/issues/14) | 5 | Alta |
-| TEST-1 | Implementar pruebas de seguridad con OWASP ZAP | [#9](https://github.com/JuliianaV2106/circle-guard-public/issues/9) | 8 | Alta |
-| CICD-3 | Agregar reporte de cobertura de código | [#8](https://github.com/JuliianaV2106/circle-guard-public/issues/8) | 5 | Media |
-| TEST-2 | Configurar reporte de cobertura con JaCoCo | [#10](https://github.com/JuliianaV2106/circle-guard-public/issues/10) | 3 | Media |
 | SEC-2 | Implementar gestión de secretos | [#15](https://github.com/JuliianaV2106/circle-guard-public/issues/15) | 3 | Media |
 
 ## Metricas del equipo
 
 | Metrica | Sprint 1 | Sprint 2 |
 |---------|----------|----------|
-| HUs completadas | 2 (CICD-1, CICD-2) | 6 (INFRA-1..4, PAT-1, PAT-2) |
+| HUs completadas | 2 (CICD-1, CICD-2) | 11 (INFRA-1..4, PAT-1..3, CICD-3, CICD-4, TEST-1, TEST-2) |
 | Módulos Terraform | 0 | 3 (namespace, configmap, microservice) |
-| Puntos completados | 32 | 23 |
+| Puntos completados | 32 | 47 |
 | Cobertura de código | Por medir | Objetivo 70% |
 | Pipelines exitosos | 3 (DEV, STAGE, MASTER) | 3 |
 

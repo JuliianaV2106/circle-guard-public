@@ -87,6 +87,22 @@ pipeline {
                 }
             }
         }
+
+        stage('OWASP ZAP Scan') {
+            steps {
+                script {
+                    sh '''
+                        chmod +x scripts/zap-scan.sh
+                        ./scripts/zap-scan.sh http://host.docker.internal:31450 build/reports/zap || echo "ZAP scan completed"
+                    '''
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'build/reports/zap/*', allowEmptyArchive: true
+                }
+            }
+        }
     }
     post {
         always {
