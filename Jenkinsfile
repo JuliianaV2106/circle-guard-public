@@ -93,6 +93,7 @@ pipeline {
                                 --exit-code 0 \
                                 --severity HIGH,CRITICAL \
                                 --format table \
+                                --timeout 10m \
                                 circleguard/${service}:latest
                         """
                     }
