@@ -118,7 +118,7 @@ La configuracion es trazable via control de versiones de Terraform.
 
 ### 8. Health Check
 **Herramienta:** Kubernetes liveness y readiness probes  
-**Archivos:** `k8s/*.yaml`, `k8s-stage/*.yaml`, `k8s-master/*.yaml`
+**Archivos:** `terraform/modules/microservice/main.tf`
 
 **Problema que resuelve:** Kubernetes no sabia cuando un pod estaba
 listo para recibir trafico o cuando habia entrado en un estado
@@ -126,10 +126,60 @@ irrecuperable, causando que el trafico llegara a pods no disponibles.
 
 **Solucion implementada:** Se configuran liveness probes (el pod esta
 vivo) y readiness probes (el pod esta listo para recibir trafico)
-usando el endpoint `/actuator/health` de Spring Boot Actuator.
+usando el endpoint `/actuator/health` de Spring Boot Actuator, gestionadas
+por el modulo `microservice` de Terraform.
 
 **Beneficio:** Kubernetes reinicia automaticamente pods en estado
 irrecuperable y no envia trafico a pods que aun no estan listos.
+
+---
+
+### 9. Retry Pattern
+**Implementaciones:** Resilience4j Retry (auth-service), Spring Retry (notification-service)
+
+#### Resilience4j Retry — auth-service
+**Archivo:** `services/circleguard-auth-service/src/main/java/com/circleguard/auth/client/IdentityClient.java`
+
+**Problema que resuelve:** Cuando identity-service esta temporalmente
+caído o sobrecargado, las llamadas fallaban inmediatamente sin reintento,
+causando falsos positivos de autenticacion.
+
+**Solucion implementada:** Se agrega `@Retry` de Resilience4j sobre el
+mismo `IdentityClient` que ya tenia Circuit Breaker. La ejecucion es:
+Retry (3 intentos con 1s de espera) → Circuit Breaker → fallback.
+
+**Configuracion:**
+
+| Parametro | Valor | Descripcion |
+|-----------|-------|-------------|
+| max-attempts | 3 | Intentos maximos antes de fallback |
+| wait-duration | 1s | Espera entre reintentos |
+| retry-exceptions | ResourceAccessException, TimeoutException | Excepciones que disparan retry |
+
+#### Spring Retry — notification-service
+**Archivos:**
+- `services/circleguard-notification-service/src/main/java/com/circleguard/notification/service/PushServiceImpl.java`
+- `services/circleguard-notification-service/src/main/java/com/circleguard/notification/service/EmailServiceImpl.java`
+- `services/circleguard-notification-service/src/main/java/com/circleguard/notification/service/SmsServiceImpl.java`
+
+**Problema que resuelve:** El envio de notificaciones (push, email, SMS)
+falla por problemas temporales de red o del proveedor externo (Gotify,
+servidor SMTP, gateway SMS).
+
+**Solucion implementada:** `@Retryable` de Spring Retry con 3 intentos
+y backoff de 2 segundos. Si todos fallan, `@Recover` registra el fallo
+definitivo en el log de auditoria.
+
+**Configuracion comun:**
+
+| Parametro | Valor | Descripcion |
+|-----------|-------|-------------|
+| maxAttempts | 3 | Reintentos maximos |
+| backoff | 2000ms | Espera entre reintentos |
+| retryFor | Exception.class | Cualquier excepcion dispara retry |
+
+**Beneficio:** Las notificaciones se reintentan automaticamente ante
+fallos transitorios, mejorando la tasa de entrega sin intervencion manual.
 
 ---
 
@@ -145,6 +195,7 @@ irrecuperable y no envia trafico a pods que aun no estan listos.
 | 6 | Circuit Breaker | Resiliencia | Implementado |
 | 7 | External Configuration | Configuracion | Implementado |
 | 8 | Health Check | Disponibilidad | Implementado |
+| 9 | Retry | Resiliencia | Implementado |
 
 ---
 *Documentacion generada como parte del Proyecto Final — Ingenieria de Software V*

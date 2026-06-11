@@ -1,6 +1,7 @@
 package com.circleguard.auth.client;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class IdentityClient {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String IDENTITY_URL = "http://localhost:8083/api/v1/identities/map";
 
+    @Retry(name = "identityService", fallbackMethod = "getAnonymousIdFallback")
     @CircuitBreaker(name = "identityService", fallbackMethod = "getAnonymousIdFallback")
     public UUID getAnonymousId(String realIdentity) {
         logger.info("Calling identity-service for user: {}", realIdentity);
@@ -23,7 +25,7 @@ public class IdentityClient {
     }
 
     public UUID getAnonymousIdFallback(String realIdentity, Exception ex) {
-        logger.warn("Circuit breaker activated for identity-service. User: {}. Error: {}",
+        logger.warn("Fallback after retries/circuit-breaker for identity-service. User: {}. Error: {}",
                 realIdentity, ex.getMessage());
         return UUID.nameUUIDFromBytes(realIdentity.getBytes());
     }

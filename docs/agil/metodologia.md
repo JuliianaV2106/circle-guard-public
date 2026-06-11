@@ -67,6 +67,7 @@ de infraestructura y microservicios donde las tareas tienen duraciones variables
 |----|----------|-------|--------|
 | PAT-1 | Implementar Circuit Breaker | [#16](https://github.com/JuliianaV2106/circle-guard-public/issues/16) | ✅ |
 | PAT-2 | Implementar External Configuration | [#17](https://github.com/JuliianaV2106/circle-guard-public/issues/17) | ✅ |
+| PAT-3 | Implementar Retry Pattern | — | ✅ |
 
 _Leyenda: ✅ Done · ⏳ Pending_
 
@@ -136,6 +137,7 @@ _Leyenda: ✅ Done · ⏳ Pending_
 - ✅ CICD-2 — Aprobación manual para producción
 - ✅ PAT-1 — Circuit Breaker
 - ✅ PAT-2 — External Configuration
+- ✅ PAT-3 — Retry Pattern (Resilience4j + Spring Retry)
 
 **Pendiente (pasa a Iteración 3):**
 - ⏳ CICD-3 — Reporte de cobertura de código
@@ -188,6 +190,7 @@ _Leyenda: ✅ Done · ⏳ Pending_
 | INFRA-4 | Configurar backend remoto de Terraform | [#5](https://github.com/JuliianaV2106/circle-guard-public/issues/5) | 5 | Completado |
 | PAT-1 | Implementar Circuit Breaker | [#16](https://github.com/JuliianaV2106/circle-guard-public/issues/16) | 8 | Completado |
 | PAT-2 | Implementar External Configuration | [#17](https://github.com/JuliianaV2106/circle-guard-public/issues/17) | 3 | Completado |
+| PAT-3 | Implementar Retry Pattern | — | 3 | Completado |
 
 **Pendiente (pasa a Sprint 3):**
 
@@ -202,8 +205,8 @@ _Leyenda: ✅ Done · ⏳ Pending_
 | SEC-1 | Configurar RBAC en Kubernetes | [#14](https://github.com/JuliianaV2106/circle-guard-public/issues/14) | 5 | Pendiente |
 | SEC-2 | Implementar gestión de secretos | [#15](https://github.com/JuliianaV2106/circle-guard-public/issues/15) | 3 | Pendiente |
 
-**Velocidad del sprint:** 23 puntos  
-**Completado:** 23/23 puntos (100%)
+**Velocidad del sprint:** 26 puntos  
+**Completado:** 26/26 puntos (100%)
 
 ### Sprint 3 — Pendientes (Observabilidad, Seguridad, Pruebas)
 **Periodo:** 14 Junio 2026 - 21 Junio 2026  

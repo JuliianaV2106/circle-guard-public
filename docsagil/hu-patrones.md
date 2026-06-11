@@ -19,3 +19,13 @@
 | **Prioridad** | Alta |
 | **Estado** | ✅ Done |
 | **Commit** | `ec32997` |
+
+## PAT-3: Implementar Retry Pattern
+| Campo | Valor |
+|-------|-------|
+| **Issue** | — |
+| **Historia** | Como arquitecto, quiero reintentos automáticos en llamadas a servicios |
+| **Criterios de aceptación** | Reintentos configurados en auth-service (Resilience4j) y notification-service (Spring Retry); fallback documentado |
+| **Prioridad** | Alta |
+| **Estado** | ✅ Done |
+| **Commits** | `ec32997` (Spring Retry existente), commit actual (Resilience4j Retry) |
