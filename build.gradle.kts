@@ -48,11 +48,10 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
-        finalizedBy(tasks.jacocoTestReport)
     }
 
-    tasks.jacocoTestReport {
-        dependsOn(tasks.test)
+    tasks.withType<JacocoReport> {
+        dependsOn(tasks.withType<Test>())
         reports {
             xml.required.set(true)
             html.required.set(true)
@@ -60,7 +59,7 @@ subprojects {
         }
     }
 
-    tasks.jacocoTestCoverageVerification {
+    tasks.withType<JacocoCoverageVerification> {
         violationRules {
             rule {
                 limit {
