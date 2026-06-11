@@ -21,7 +21,6 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''./gradlew cleanTest test --no-daemon \
-                    -x :services:circleguard-notification-service:test \
                     -x :services:circleguard-promotion-service:test'''
             }
             post {
