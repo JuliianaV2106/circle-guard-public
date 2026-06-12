@@ -46,7 +46,7 @@ Circle Guard es un sistema de control de acceso sanitario universitario diseñad
 
 ---
 
-## 2. Infraestructura como Código (5%)
+## 2. Infraestructura como Código (15%)
 
 ### Tecnología: Terraform 1.6+
 
@@ -79,7 +79,7 @@ Circle Guard es un sistema de control de acceso sanitario universitario diseñad
 
 ---
 
-## 3. Patrones de Diseño (5%)
+## 3. Patrones de Diseño (10%)
 
 | Patrón | Librería | Servicio | Descripción |
 |--------|----------|----------|-------------|
@@ -98,7 +98,7 @@ Circle Guard es un sistema de control de acceso sanitario universitario diseñad
 
 ---
 
-## 4. CI/CD Avanzado (5%)
+## 4. CI/CD Avanzado (15%)
 
 ### Pipeline DEV (Jenkinsfile)
 
@@ -138,7 +138,7 @@ Checkout → Semantic Versioning → Build → Tests → Dependency Check
 
 ---
 
-## 5. Pruebas Completas (5%)
+## 5. Pruebas Completas (15%)
 
 | Tipo | Herramienta | Cobertura/Resultado |
 |------|-------------|---------------------|
@@ -219,6 +219,21 @@ Generadas por `scripts/generate-release-notes.sh` con:
 | Service Health | circleguard-services | Estado UP/DOWN, tasa requests, errores HTTP, latencia P95, CPU |
 | JVM Metrics | circleguard-jvm | Heap/non-heap memory, GC pauses, threads, clases cargadas |
 | Business Metrics | circleguard-business | Usuarios activos, QR generados, notificaciones, verificaciones |
+
+### Métricas de Negocio
+
+Se implementaron 6 métricas personalizadas via Micrometer `MeterRegistry` en un `BusinessMetricsService` para el dashboard de negocio:
+
+| Métrica | Tipo | Descripción |
+|---------|------|-------------|
+| `circleguard_active_users_total` | Gauge | Usuarios activos concurrentes |
+| `circleguard_qr_codes_generated_total` | Counter | Total de códigos QR generados |
+| `circleguard_notifications_sent_total` | Counter | Notificaciones enviadas |
+| `circleguard_identity_verifications_total` | Counter | Verificaciones de identidad |
+| `circleguard_form_submissions_total` | Counter | Formularios de salud enviados |
+| `circleguard_kafka_messages_total` | Counter | Mensajes en Kafka |
+
+Las métricas se simulan con tareas programadas (`@Scheduled`) cada 3-15 segundos para propósitos de demostración, pero en producción serían alimentadas por eventos reales de los microservicios.
 
 ### Alertas Prometheus (5 reglas)
 
@@ -475,14 +490,24 @@ circle-guard-public/
 # Iniciar todo el stack
 docker compose -f docker-compose.full.yml up -d
 
+# Iniciar solo monitoreo
+docker compose -f docker-compose.full.yml up -d prometheus grafana jaeger
+
 # Ejecutar tests
 ./gradlew test --no-daemon
 
 # Ver health de un servicio
 curl http://localhost:8087/actuator/health
 
+# Ver liveness/readiness probes
+curl http://localhost:8087/actuator/health/liveness
+curl http://localhost:8087/actuator/health/readiness
+
 # Ver métricas Prometheus
 curl http://localhost:8087/actuator/prometheus
+
+# Ver métricas de negocio en Prometheus
+curl http://localhost:9090/api/v1/query?query=circleguard_qr_codes_generated_total
 
 # Desplegar con Terraform
 cd terraform/environments/dev
@@ -497,6 +522,15 @@ terraform apply -auto-approve
 
 # Generar certificados TLS
 ./scripts/gen-certs.sh api.circleguard.edu
+
+# Fix DNS para Docker BuildKit (si falla resolución de registry)
+# Agregar a %USERPROFILE%\.docker\daemon.json:
+# { "dns": ["8.8.8.8", "1.1.1.1"] }
+# Luego reiniciar Docker Desktop
+
+# Pre-pull de imágenes base para builds Jenkins
+docker pull gradle:8.7-jdk21
+docker pull eclipse-temurin:21-jre-alpine
 ```
 
 ---
