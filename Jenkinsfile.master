@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        pollSCM('*/5 * * * *')
+    }
     environment {
         SONAR_TOKEN = credentials('sonarqube-token')
         TFE_TOKEN   = credentials('tfetoken')
