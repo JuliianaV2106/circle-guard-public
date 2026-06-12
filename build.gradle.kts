@@ -5,6 +5,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.24" apply false
     kotlin("plugin.jpa") version "1.9.24" apply false
     id("org.sonarqube") version "4.4.1.3373"
+    id("org.owasp.dependencycheck") version "9.2.0" apply false
     id("jacoco")
 }
 
@@ -21,6 +22,7 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "jacoco")
+    apply(plugin = "org.owasp.dependencycheck")
     extensions.configure<JavaPluginExtension> {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
@@ -61,6 +63,12 @@ subprojects {
             html.required.set(true)
             csv.required.set(false)
         }
+    }
+
+    tasks.withType<org.owasp.dependencycheck.gradle.tasks.DependencyCheckAnalyze> {
+        failBuildOnCVSS.set(11.0f)
+        outputDirectory.set(layout.buildDirectory.dir("reports/dependency-check"))
+        formats.addAll(listOf("HTML", "JSON"))
     }
 
     tasks.withType<JacocoCoverageVerification> {

@@ -15,3 +15,45 @@ variable "app_version" {
   type        = string
   default     = "1.0.0"
 }
+
+variable "jwt_secret" {
+  description = "Secreto JWT para firmar tokens"
+  type        = string
+  sensitive   = true
+}
+
+variable "qr_secret" {
+  description = "Secreto QR para firmar codigos QR"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_username" {
+  description = "Usuario de PostgreSQL"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_password" {
+  description = "Password de PostgreSQL"
+  type        = string
+  sensitive   = true
+}
+
+variable "vault_secret" {
+  description = "Secreto de encriptacion del Vault de identidades"
+  type        = string
+  sensitive   = true
+}
+
+variable "vault_salt" {
+  description = "Salt para encriptacion del Vault"
+  type        = string
+  sensitive   = true
+}
+
+variable "vault_hash_salt" {
+  description = "Salt para hashing de identidades"
+  type        = string
+  sensitive   = true
+}

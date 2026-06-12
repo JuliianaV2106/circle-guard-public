@@ -88,3 +88,9 @@ variable "additional_env_vars" {
   type        = map(string)
   default     = {}
 }
+
+variable "service_account_name" {
+  description = "Nombre del ServiceAccount a usar"
+  type        = string
+  default     = null
+}

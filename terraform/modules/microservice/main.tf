@@ -31,6 +31,8 @@ resource "kubernetes_deployment" "this" {
       }
 
       spec {
+        service_account_name = var.service_account_name
+
         container {
           name              = var.service_name
           image             = local.image
@@ -43,6 +45,12 @@ resource "kubernetes_deployment" "this" {
           env {
             name  = "SPRING_PROFILES_ACTIVE"
             value = var.spring_profile
+          }
+
+          env_from {
+            secret_ref {
+              name = "circleguard-secrets"
+            }
           }
 
           dynamic "env" {

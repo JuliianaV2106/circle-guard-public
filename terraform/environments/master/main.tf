@@ -45,6 +45,26 @@ module "configmap_master" {
   }
 }
 
+module "rbac_master" {
+  source         = "../../modules/rbac"
+  namespace_name = module.namespace_master.namespace_name
+  service_names  = ["gateway-service", "notification-service"]
+}
+
+module "secrets_master" {
+  source         = "../../modules/secrets"
+  namespace_name = module.namespace_master.namespace_name
+  secrets = {
+    JWT_SECRET              = var.jwt_secret
+    QR_SECRET               = var.qr_secret
+    SPRING_DATASOURCE_USERNAME = var.db_username
+    SPRING_DATASOURCE_PASSWORD = var.db_password
+    VAULT_SECRET            = var.vault_secret
+    VAULT_SALT              = var.vault_salt
+    VAULT_HASH_SALT         = var.vault_hash_salt
+  }
+}
+
 module "gateway_service" {
   source                  = "../../modules/microservice"
   service_name            = "gateway-service"
@@ -53,6 +73,7 @@ module "gateway_service" {
   service_type            = "NodePort"
   node_port               = 31451
   spring_profile          = "prod"
+  service_account_name    = "gateway-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
 }
@@ -63,6 +84,7 @@ module "notification_service" {
   namespace_name          = module.namespace_master.namespace_name
   container_port          = 8084
   spring_profile          = "prod"
+  service_account_name    = "notification-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   liveness_initial_delay  = 90

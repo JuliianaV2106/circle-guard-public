@@ -45,12 +45,34 @@ module "configmap_dev" {
   }
 }
 
+module "rbac_dev" {
+  source         = "../../modules/rbac"
+  namespace_name = module.namespace_dev.namespace_name
+  service_names  = ["auth-service", "gateway-service", "identity-service", "form-service", "notification-service", "dashboard-service"]
+}
+
+module "secrets_dev" {
+  source         = "../../modules/secrets"
+  namespace_name = module.namespace_dev.namespace_name
+  secrets = {
+    JWT_SECRET              = var.jwt_secret
+    QR_SECRET               = var.qr_secret
+    SPRING_DATASOURCE_USERNAME = var.db_username
+    SPRING_DATASOURCE_PASSWORD = var.db_password
+    SPRING_LDAP_PASSWORD    = var.ldap_password
+    VAULT_SECRET            = var.vault_secret
+    VAULT_SALT              = var.vault_salt
+    VAULT_HASH_SALT         = var.vault_hash_salt
+  }
+}
+
 module "auth_service" {
   source                  = "../../modules/microservice"
   service_name            = "auth-service"
   namespace_name          = module.namespace_dev.namespace_name
   container_port          = 8081
   spring_profile          = var.environment
+  service_account_name    = "auth-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   liveness_initial_delay  = 90
@@ -65,6 +87,7 @@ module "gateway_service" {
   service_type            = "NodePort"
   node_port               = 31449
   spring_profile          = var.environment
+  service_account_name    = "gateway-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   probe_path              = "/actuator/health"
@@ -76,6 +99,7 @@ module "identity_service" {
   namespace_name          = module.namespace_dev.namespace_name
   container_port          = 8082
   spring_profile          = var.environment
+  service_account_name    = "identity-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   liveness_initial_delay  = 90
@@ -88,6 +112,7 @@ module "form_service" {
   namespace_name          = module.namespace_dev.namespace_name
   container_port          = 8083
   spring_profile          = var.environment
+  service_account_name    = "form-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   liveness_initial_delay  = 90
@@ -100,6 +125,7 @@ module "notification_service" {
   namespace_name          = module.namespace_dev.namespace_name
   container_port          = 8084
   spring_profile          = var.environment
+  service_account_name    = "notification-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   liveness_initial_delay  = 90
@@ -112,6 +138,7 @@ module "dashboard_service" {
   namespace_name          = module.namespace_dev.namespace_name
   container_port          = 8085
   spring_profile          = var.environment
+  service_account_name    = "dashboard-service-sa"
   enable_liveness_probe   = true
   enable_readiness_probe  = true
   liveness_initial_delay  = 90

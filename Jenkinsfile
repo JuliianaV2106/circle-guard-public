@@ -65,6 +65,17 @@ pipeline {
                 }
             }
         }
+        stage('Dependency Check (SCA)') {
+            steps {
+                sh './gradlew dependencyCheckAnalyze --no-daemon || true'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: '**/build/reports/dependency-check/*.xml'
+                    archiveArtifacts artifacts: '**/build/reports/dependency-check/*', allowEmptyArchive: true
+                }
+            }
+        }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube') {
