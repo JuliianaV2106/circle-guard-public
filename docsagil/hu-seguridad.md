@@ -7,7 +7,7 @@
 | **Historia** | Como administrador, quiero RBAC en Kubernetes para controlar acceso |
 | **Criterios de aceptación** | Roles y bindings definidos para cada namespace |
 | **Prioridad** | Alta |
-| **Estado** | ⏳ Pending |
+| **Estado** | ✅ Done |
 
 ## SEC-2: Implementar gestión de secretos
 | Campo | Valor |
@@ -16,4 +16,4 @@
 | **Historia** | Como desarrollador, quiero secretos gestionados de forma segura |
 | **Criterios de aceptación** | Secretos en K8s Secrets, no en archivos planos |
 | **Prioridad** | Alta |
-| **Estado** | ⏳ Pending |
+| **Estado** | ✅ Done |
