@@ -41,6 +41,7 @@ module "configmap_master" {
     LDAP_URL                   = "ldap://host.docker.internal:389"
     LOG_LEVEL                  = "WARN"
     APP_VERSION                = var.app_version
+    MANAGEMENT_ZIPKIN_TRACING_ENDPOINT = "http://jaeger:9411/api/v2/spans"
   }
 }
 
@@ -57,9 +58,13 @@ module "gateway_service" {
 }
 
 module "notification_service" {
-  source         = "../../modules/microservice"
-  service_name   = "notification-service"
-  namespace_name = module.namespace_master.namespace_name
-  container_port = 8084
-  spring_profile = "prod"
+  source                  = "../../modules/microservice"
+  service_name            = "notification-service"
+  namespace_name          = module.namespace_master.namespace_name
+  container_port          = 8084
+  spring_profile          = "prod"
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  liveness_initial_delay  = 90
+  readiness_initial_delay = 45
 }

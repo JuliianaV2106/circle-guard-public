@@ -41,15 +41,20 @@ module "configmap_dev" {
     LDAP_URL                   = "ldap://host.docker.internal:389"
     LOG_LEVEL                  = "DEBUG"
     APP_VERSION                = var.app_version
+    MANAGEMENT_ZIPKIN_TRACING_ENDPOINT = "http://jaeger:9411/api/v2/spans"
   }
 }
 
 module "auth_service" {
-  source         = "../../modules/microservice"
-  service_name   = "auth-service"
-  namespace_name = module.namespace_dev.namespace_name
-  container_port = 8081
-  spring_profile = var.environment
+  source                  = "../../modules/microservice"
+  service_name            = "auth-service"
+  namespace_name          = module.namespace_dev.namespace_name
+  container_port          = 8081
+  spring_profile          = var.environment
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  liveness_initial_delay  = 90
+  readiness_initial_delay = 45
 }
 
 module "gateway_service" {
@@ -66,33 +71,49 @@ module "gateway_service" {
 }
 
 module "identity_service" {
-  source         = "../../modules/microservice"
-  service_name   = "identity-service"
-  namespace_name = module.namespace_dev.namespace_name
-  container_port = 8082
-  spring_profile = var.environment
+  source                  = "../../modules/microservice"
+  service_name            = "identity-service"
+  namespace_name          = module.namespace_dev.namespace_name
+  container_port          = 8082
+  spring_profile          = var.environment
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  liveness_initial_delay  = 90
+  readiness_initial_delay = 45
 }
 
 module "form_service" {
-  source         = "../../modules/microservice"
-  service_name   = "form-service"
-  namespace_name = module.namespace_dev.namespace_name
-  container_port = 8083
-  spring_profile = var.environment
+  source                  = "../../modules/microservice"
+  service_name            = "form-service"
+  namespace_name          = module.namespace_dev.namespace_name
+  container_port          = 8083
+  spring_profile          = var.environment
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  liveness_initial_delay  = 90
+  readiness_initial_delay = 45
 }
 
 module "notification_service" {
-  source         = "../../modules/microservice"
-  service_name   = "notification-service"
-  namespace_name = module.namespace_dev.namespace_name
-  container_port = 8084
-  spring_profile = var.environment
+  source                  = "../../modules/microservice"
+  service_name            = "notification-service"
+  namespace_name          = module.namespace_dev.namespace_name
+  container_port          = 8084
+  spring_profile          = var.environment
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  liveness_initial_delay  = 90
+  readiness_initial_delay = 45
 }
 
 module "dashboard_service" {
-  source         = "../../modules/microservice"
-  service_name   = "dashboard-service"
-  namespace_name = module.namespace_dev.namespace_name
-  container_port = 8085
-  spring_profile = var.environment
+  source                  = "../../modules/microservice"
+  service_name            = "dashboard-service"
+  namespace_name          = module.namespace_dev.namespace_name
+  container_port          = 8085
+  spring_profile          = var.environment
+  enable_liveness_probe   = true
+  enable_readiness_probe  = true
+  liveness_initial_delay  = 90
+  readiness_initial_delay = 45
 }

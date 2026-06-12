@@ -1,0 +1,70 @@
+{
+  "title": "CircleGuard - JVM Metrics",
+  "uid": "circleguard-jvm",
+  "version": 1,
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "tags": ["circleguard", "jvm", "metrics"],
+  "panels": [
+    {
+      "title": "Heap Memory Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "jvm_memory_used_bytes{area=\"heap\"}",
+          "legendFormat": "{{application}} - {{id}}"
+        }
+      ],
+      "description": "JVM heap memory usage per service"
+    },
+    {
+      "title": "Non-Heap Memory",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "jvm_memory_used_bytes{area=\"nonheap\"}",
+          "legendFormat": "{{application}} - {{id}}"
+        }
+      ],
+      "description": "JVM non-heap memory usage per service"
+    },
+    {
+      "title": "GC Pause Time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "rate(jvm_gc_pause_seconds_sum[5m])",
+          "legendFormat": "{{application}} - {{cause}}"
+        }
+      ],
+      "description": "GC pause time per service"
+    },
+    {
+      "title": "Thread Count",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "jvm_threads_live_threads",
+          "legendFormat": "{{application}} - live threads"
+        }
+      ],
+      "description": "Live thread count per service"
+    },
+    {
+      "title": "Class Loading",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "jvm_classes_loaded_classes",
+          "legendFormat": "{{application}} - loaded classes"
+        }
+      ],
+      "description": "Loaded classes per service"
+    }
+  ]
+}

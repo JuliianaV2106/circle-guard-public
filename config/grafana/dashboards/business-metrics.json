@@ -1,0 +1,82 @@
+{
+  "title": "CircleGuard - Business Metrics",
+  "uid": "circleguard-business",
+  "version": 1,
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "tags": ["circleguard", "business"],
+  "panels": [
+    {
+      "title": "Active Users",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "circleguard_active_users_total",
+          "legendFormat": "Active Users"
+        }
+      ],
+      "description": "Number of active users in the system"
+    },
+    {
+      "title": "QR Codes Generated",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "rate(circleguard_qr_codes_generated_total[5m])",
+          "legendFormat": "QR Codes/sec"
+        }
+      ],
+      "description": "Rate of QR code generation"
+    },
+    {
+      "title": "Notifications Sent",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "rate(circleguard_notifications_sent_total[5m])",
+          "legendFormat": "{{type}}"
+        }
+      ],
+      "description": "Rate of notifications sent by type"
+    },
+    {
+      "title": "Identity Verifications",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "rate(circleguard_identity_verifications_total[5m])",
+          "legendFormat": "{{result}}"
+        }
+      ],
+      "description": "Identity verification rate by result"
+    },
+    {
+      "title": "Form Submissions",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "rate(circleguard_form_submissions_total[5m])",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "description": "Form submission rate"
+    },
+    {
+      "title": "Kafka Messages",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "targets": [
+        {
+          "expr": "rate(circleguard_kafka_messages_total[5m])",
+          "legendFormat": "{{topic}} - {{action}}"
+        }
+      ],
+      "description": "Kafka message rate by topic"
+    }
+  ]
+}
