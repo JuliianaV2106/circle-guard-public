@@ -65,10 +65,8 @@ subprojects {
         }
     }
 
-    tasks.withType<org.owasp.dependencycheck.gradle.tasks.DependencyCheckAnalyze> {
-        failBuildOnCVSS.set(11.0f)
-        outputDirectory.set(layout.buildDirectory.dir("reports/dependency-check"))
-        formats.addAll(listOf("HTML", "JSON"))
+    tasks.named("dependencyCheckAnalyze") {
+        outputs.dir(layout.buildDirectory.dir("reports/dependency-check"))
     }
 
     tasks.withType<JacocoCoverageVerification> {

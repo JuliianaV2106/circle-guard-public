@@ -4,9 +4,9 @@
 
 | Campo | Datos |
 |-------|-------|
-| **Estudiante** | Juliana Filigrana Valencia |
+| **Estudiante** | Juliana Filigrana Valencia - Juan Manuek Casanova Marin|
 | **Curso** | Ingeniería de Software V — Semestre 8 |
-| **Institución** | [Nombre de la Universidad] |
+| **Institución** | Universidad ICESI |
 | **Fecha** | Junio 2026 |
 | **Repositorio** | https://github.com/JuliianaV2106/circle-guard-public |
 | **Kanban** | https://github.com/users/JuliianaV2106/projects/2 |
@@ -501,4 +501,4 @@ terraform apply -auto-approve
 
 ---
 
-*Documento generado el Junio 2026 — Ingeniería de Software V*
+* Junio 2026 — Ingeniería de Software V*
